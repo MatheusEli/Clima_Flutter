@@ -1,4 +1,10 @@
+import 'package:clima_flutter/services/location.dart';
+import 'package:clima_flutter/services/networking.dart';
+
 class WeatherModel {
+  late double latitude;
+  late double longitude;
+
   String getWeatherIcon(int condition) {
     if (condition < 300) {
       return '🌩';
@@ -29,5 +35,34 @@ class WeatherModel {
     } else {
       return 'Bring a 🧥 just in case';
     }
+  }
+
+  Future<dynamic> getLocationWeather() async {
+    Location location = Location();
+    await location.getCurrentLocation();
+
+    latitude = location.getLatitude();
+    longitude = location.getLongitude();
+
+    NetworkHelper networkHelper = NetworkHelper(
+      'api.openweathermap.org',
+      'data/2.5/weather',
+      {
+        'lat': latitude.toString(),
+        'units': 'metric',
+        'lon': longitude.toString(),
+        'appid': apiKey,
+      },
+    );
+
+    var weatherData = await networkHelper.getData();
+
+    return weatherData;
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) {
+    //     return LocationScreen(weatherData);
+    //   }),
+    // );
   }
 }
