@@ -58,11 +58,22 @@ class WeatherModel {
     var weatherData = await networkHelper.getData();
 
     return weatherData;
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) {
-    //     return LocationScreen(weatherData);
-    //   }),
-    // );
+  }
+
+  Future<dynamic> getCityWeather(String cityName) async {
+    NetworkHelper networkHelper = NetworkHelper(
+      'api.openweathermap.org',
+      'data/2.5/weather',
+      {
+        'q': cityName,
+        'units': 'metric',
+        'appid': apiKey,
+      },
+    );
+
+    print(networkHelper);
+    var weatherData = await networkHelper.getData();
+
+    return weatherData;
   }
 }
